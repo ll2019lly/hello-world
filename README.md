@@ -173,3 +173,13 @@ login <username> <password>
 ```
 
 The server responds with `login ok` or `login failed`.
+
+### Protobuf Messages
+
+The server now also supports login messages encoded with
+[Protocol Buffers](https://developers.google.com/protocol-buffers).
+Clients should send a `LoginRequest` message containing `username` and
+`password` fields. The server replies with a `LoginResponse` message
+containing a `success` flag and a textual `message`.
+
+See `game-server/src/main/proto/login.proto` for the schema definition.
