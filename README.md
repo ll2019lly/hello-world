@@ -138,3 +138,38 @@ Want to add even more code and fun styles to your GitHub Pages website? [Follow 
 ## Everything you need to know about GitHub
 
 Getting started is the hardest part. If there’s anything you’d like to know as you get started with GitHub, try searching [GitHub Help](https://help.github.com). Our documentation has tutorials on everything from changing your repository settings to configuring GitHub from your command line.
+
+## Java Netty Game Server
+
+This repository now includes a simple TCP game server written in Java using Netty. It demonstrates how to authenticate users against a MySQL database.
+
+### Building
+
+A Maven build file is provided in `game-server/pom.xml`. The project requires Java 17 or higher. After installing Maven and a local MySQL server, build with:
+
+```bash
+cd game-server
+mvn package
+```
+
+The Maven build produces `target/game-server-1.0-SNAPSHOT-jar-with-dependencies.jar` which can be run directly.
+
+### Running the server
+
+1. Create a MySQL database and table using `game-server/schema.sql`.
+2. Update the connection settings in `LoginHandler` if necessary.
+3. Start the server:
+
+```bash
+java -jar target/game-server-1.0-SNAPSHOT-jar-with-dependencies.jar 8080
+```
+
+### Protocol
+
+Clients connect over TCP and send a single line to log in:
+
+```
+login <username> <password>
+```
+
+The server responds with `login ok` or `login failed`.
