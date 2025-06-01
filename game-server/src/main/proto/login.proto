@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option java_package = "com.example.gameserver.proto";
+option java_outer_classname = "LoginProto";
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  bool success = 1;
+  string message = 2;
+}

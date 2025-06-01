@@ -8,8 +8,11 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import com.example.gameserver.proto.LoginProto;
 
 public class GameServer {
     private final int port;
@@ -29,11 +32,13 @@ public class GameServer {
                  @Override
                  protected void initChannel(SocketChannel ch) {
                      ChannelPipeline p = ch.pipeline();
-                     p.addLast(new StringDecoder());
-                     p.addLast(new StringEncoder());
-                     p.addLast(new LoginHandler());
-                 }
-             });
+                    p.addLast(new ProtobufVarint32FrameDecoder());
+                    p.addLast(new ProtobufDecoder(LoginProto.LoginRequest.getDefaultInstance()));
+                    p.addLast(new ProtobufVarint32LengthFieldPrepender());
+                    p.addLast(new ProtobufEncoder());
+                    p.addLast(new LoginProtoHandler());
+                }
+            });
 
             ChannelFuture f = b.bind(port).sync();
             System.out.println("Game server started on port " + port);
